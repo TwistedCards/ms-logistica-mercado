@@ -1,8 +1,10 @@
 package com.projetomercado.msmercado.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Column;
+import com.projetomercado.msmercado.model.Produto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,20 +13,16 @@ import lombok.Setter;
 @Setter
 public class ProdutoDto {
 
-	@Column(unique = true)
-	private String nome;
-	
-	@Column(unique = true)
-	private String codigo;
-	private BigDecimal qtde;
+	private List<Produto> produtos = new ArrayList<>();
+	private BigDecimal valorTotal;
 	
 	public ProdutoDto() {
 	}
 
-	public ProdutoDto(String nome, String codigo, BigDecimal qtde) {
+	public ProdutoDto(List<Produto> produtos, BigDecimal valorTotal) {
 		super();
-		this.nome = nome;
-		this.codigo = codigo;
-		this.qtde = qtde;
+		this.produtos = produtos;
+		this.valorTotal = valorTotal;
 	}
+	
 }
