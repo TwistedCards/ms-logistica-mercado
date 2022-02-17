@@ -1,7 +1,6 @@
 package com.projetomercado.msmercado.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,6 +20,7 @@ import com.projetomercado.msmercado.dto.ProdutoDto;
 import com.projetomercado.msmercado.model.Mercado;
 import com.projetomercado.msmercado.model.Produto;
 import com.projetomercado.msmercado.service.MercadoService;
+import com.projetomercado.msmercado.service.ProdutoService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +33,11 @@ public class MercadoController {
 
 	@Autowired
 	private MercadoService mercadoService;
+	
+	@Autowired
+	private ProdutoService produtoService;
+	
+	private BigDecimal valorTotalCompra;
 	
 	@GetMapping(value = "/findMercado/{id}")
 	public ResponseEntity<Mercado> findByCnpj(@PathVariable long id){
@@ -54,55 +59,31 @@ public class MercadoController {
 		}
 	}
 	
-	@PostMapping(value = "/registerProduto/{idMercado}")
-	public ResponseEntity<Mercado> registeringProduct(@RequestBody @Valid List<Produto> produtos, @PathVariable long idMercado){
+	@PostMapping(value = "/registerProduto/{idMercado}", consumes = "application/json")
+	public ResponseEntity<Mercado> registeringProduct(@RequestBody @Valid List<Produto> produtos, 
+														@PathVariable long idMercado){
 		try {
 			Mercado objMercado = mercadoService.findById(idMercado);
-			List<Produto> listProduto = new ArrayList<>();
-			
-			produtos.forEach(produtoMandado -> {
-				var p = new Produto();
-				p = produtoMandado;
-				p.setMercado(objMercado);
-				listProduto.add(p);
-			});
-			
-			objMercado.getProdutos().addAll(listProduto);
-			mercadoService.save(objMercado);
-			return ResponseEntity.ok(objMercado);
+			var mercado = mercadoService.salvandoProduto(produtos, objMercado);
+			return ResponseEntity.ok(mercado);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
 	
-	private BigDecimal valorTotalCompra;
-	
-	@PostMapping(value = "/efetuandoCompra/{idMercado}",  consumes = "application/json")
+	@PostMapping(value = "/efetuandoCompra/{idMercado}", consumes = "application/json")
 	@ResponseBody
 	public ResponseEntity<List<Produto>> fazendoCompra(@PathVariable long idMercado, @RequestBody List<ProdutoDto> produtos){
 		valorTotalCompra = BigDecimal.ZERO;
 		
 		try {
 			Mercado objMercado = mercadoService.findById(idMercado);
-			List<Produto> produtosComprados = new ArrayList<>();
-			
-			produtos.forEach(produtoEscolhido -> {
-				objMercado.getProdutos().forEach(produtoMercado -> {
-					if(produtoEscolhido.getCodigo().equals(produtoMercado.getCodigo())) {
-//						valorTotalCompra = valorTotalCompra.add(produtoMercado.getPreco().multiply(produtoEscolhido.getQtde()));
-						produtosComprados.add(produtoMercado);
-					}
-				});
-			});
-			
-			return ResponseEntity.ok(produtosComprados);
+			List<Produto> listProdutos = produtoService.processandoPedido(produtos, objMercado);
+			return ResponseEntity.ok(listProdutos);
 		} catch (Exception e) {
-			System.out.println("ERRO: " + e);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	} 
-	
-	
 	
 	
 }
