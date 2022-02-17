@@ -14,12 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -43,4 +42,16 @@ public class Produto implements Serializable{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mercado_id")
 	private Mercado mercado;
+
+	public Produto() {
+	}
+	
+	public Produto(long id, String nome, String codigo, BigDecimal preco) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.codigo = codigo;
+		this.preco = preco;
+	}
+	
 }

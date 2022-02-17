@@ -36,5 +36,16 @@ public class Mercado implements Serializable{
 	
 	@OneToMany(mappedBy = "mercado", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private List<Produto> produtos = new ArrayList<>();
+
+	public Mercado() {
+	}
+	
+	public Mercado(long id, String nome, String cnpj, List<Produto> produtos) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cnpj = cnpj;
+		this.produtos = produtos;
+	}
 	
 }
