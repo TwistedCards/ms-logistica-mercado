@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projetomercado.msmercado.model.Mercado;
+import com.projetomercado.msmercado.model.PedidoFinalizado;
 import com.projetomercado.msmercado.model.Produto;
 import com.projetomercado.msmercado.repository.MercadoRepository;
 
@@ -31,7 +32,7 @@ public class MercadoService {
 		return mercadoRepository.save(mercado);
 	}
 	
-	public Mercado salvandoProduto(List<Produto> produtos, Mercado mercado) {
+	public Mercado saveProduct(List<Produto> produtos, Mercado mercado) {
 		List<Produto> listProduto = new ArrayList<>();
 		
 		produtos.forEach(produtoMandado -> {
@@ -44,6 +45,5 @@ public class MercadoService {
 		mercado.getProdutos().addAll(listProduto);
 		return this.save(mercado);
 	}
-	
 	
 }

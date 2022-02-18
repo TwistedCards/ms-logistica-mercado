@@ -28,4 +28,10 @@ public class Mercado implements Serializable{
 		this.produtos = produtos;
 	}
 	
+	public Mercado(String nome, String cnpj) {
+		super();
+		this.nome = nome;
+		this.cnpj = cnpj;
+	}
+	
 }

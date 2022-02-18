@@ -34,6 +34,4 @@ public class ProdutoService {
 		
 		return produtoDto;
 	}
-	
-	
 }

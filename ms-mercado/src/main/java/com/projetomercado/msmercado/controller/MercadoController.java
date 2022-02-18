@@ -1,9 +1,7 @@
 package com.projetomercado.msmercado.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,8 @@ import com.projetomercado.msmercado.model.Mercado;
 import com.projetomercado.msmercado.model.PedidoFinalizado;
 import com.projetomercado.msmercado.model.PedidoRequest;
 import com.projetomercado.msmercado.model.Produto;
-import com.projetomercado.msmercado.model.ProdutoFinalizado;
-import com.projetomercado.msmercado.repository.PedidoFinalizadoRepository;
 import com.projetomercado.msmercado.service.MercadoService;
+import com.projetomercado.msmercado.service.PedidoFinalizadoService;
 import com.projetomercado.msmercado.service.ProdutoService;
 
 import lombok.Getter;
@@ -43,18 +40,27 @@ public class MercadoController {
 	private ProdutoService produtoService;
 	
 	@Autowired
-	private PedidoFinalizadoRepository pedidoFinalizadoRepository;
-	
-//	private BigDecimal valorTotalCompra;
+	private PedidoFinalizadoService pedidoFinalizadoService;
 	
 	@GetMapping(value = "/findMercado/{id}")
-	public ResponseEntity<Mercado> findByCnpj(@PathVariable long id){
+	public ResponseEntity<Mercado> findById(@PathVariable long id){
+		
 		try {
-			Mercado objMercado = mercadoService.findById(id);
-			return ResponseEntity.ok(objMercado);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			Thread.sleep(2000L);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+//		try {
+//			Mercado objMercado = mercadoService.findById(id);
+//			return ResponseEntity.ok(objMercado);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//		}
+		
+		Mercado objMercado = mercadoService.findById(id);
+		return ResponseEntity.ok(objMercado);
 	}
 	
 	@PostMapping(value = "/register")
@@ -72,7 +78,7 @@ public class MercadoController {
 														@PathVariable long idMercado){
 		try {
 			Mercado objMercado = mercadoService.findById(idMercado);
-			var mercado = mercadoService.salvandoProduto(produtos, objMercado);
+			var mercado = mercadoService.saveProduct(produtos, objMercado);
 			return ResponseEntity.ok(mercado);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -92,27 +98,12 @@ public class MercadoController {
 		}
 	} 
 	
-	// Fazer isso acontecer lá de ms-pedido
 	@PostMapping(value = "/finalizandoCompra", consumes = "application/json")
 	@ResponseBody
-	public ResponseEntity<Void> finalizandoPedido(@RequestBody ProdutoDto produtoDto){
+	public ResponseEntity<PedidoFinalizado> finalizandoPedido(@RequestBody ProdutoDto produtoDto){
 		try {
-			var pedidoFinalizado = new PedidoFinalizado();
-			List<ProdutoFinalizado> listProdutoFinalizado = new ArrayList<>();
-			
-			pedidoFinalizado.setValorTotal(produtoDto.getValorTotal());
-			
-			produtoDto.getProdutos().forEach(produtoComprado -> {
-				var produtoFinalizado = new ProdutoFinalizado();
-				
-				produtoFinalizado.setNome(produtoComprado.getNome());
-				produtoFinalizado.setPedidoFinalizado(pedidoFinalizado);
-				listProdutoFinalizado.add(produtoFinalizado);
-			});
-			
-			pedidoFinalizado.getProdutosFinalizados().addAll(listProdutoFinalizado);
-			pedidoFinalizadoRepository.save(pedidoFinalizado);
-			return ResponseEntity.noContent().build();
+			var pedidoFinalizado = pedidoFinalizadoService.setPedidoFinal(produtoDto);
+			return ResponseEntity.ok(pedidoFinalizado);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

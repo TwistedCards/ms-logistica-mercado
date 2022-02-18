@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.projetomercado.mspedido.dto.ProdutoDto;
 import com.projetomercado.mspedido.model.Mercado;
+import com.projetomercado.mspedido.model.PedidoFinalizado;
 import com.projetomercado.mspedido.model.PedidoRequest;
 
 @Component
@@ -20,11 +21,15 @@ import com.projetomercado.mspedido.model.PedidoRequest;
 public interface MercadoFeignClient {
 
 	@GetMapping(value = "/findMercado/{id}")
-	public ResponseEntity<Mercado> findByCnpj(@PathVariable long id);
+	public ResponseEntity<Mercado> findById(@PathVariable long id);
 	
 	@PostMapping(value = "/efetuandoCompra/{idMercado}", consumes = "application/json")
 	@ResponseBody
 	public ResponseEntity<ProdutoDto> fazendoCompra(@PathVariable long idMercado, 
 														@RequestBody List<PedidoRequest> pedidoRequest);
+	
+	@PostMapping(value = "/finalizandoCompra", consumes = "application/json")
+	@ResponseBody
+	public ResponseEntity<PedidoFinalizado> finalizandoPedido(@RequestBody ProdutoDto produtoDto);
 	
 }
