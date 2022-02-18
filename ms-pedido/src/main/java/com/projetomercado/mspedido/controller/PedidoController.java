@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projetomercado.mspedido.dto.ProdutoDto;
 import com.projetomercado.mspedido.model.Mercado;
-import com.projetomercado.mspedido.model.Pedido;
-import com.projetomercado.mspedido.model.Produto;
+import com.projetomercado.mspedido.model.PedidoRequest;
 import com.projetomercado.mspedido.service.PedidoService;
 
 @RestController
@@ -30,9 +29,10 @@ public class PedidoController {
 	}
 	
 	@PostMapping(value = "/{idMercado}/criandoPedido")
-	public ResponseEntity<List<Pedido>> getCompra(@PathVariable long idMercado, @RequestBody List<ProdutoDto> produtos){
-		List<Pedido> listPedido = pedidoService.fazendoPedido(idMercado, produtos);
-		return ResponseEntity.ok(listPedido);
+	public ResponseEntity<ProdutoDto> getCompra(@PathVariable long idMercado, 
+												@RequestBody List<PedidoRequest> pedidosRequest){
+		ProdutoDto produtoDto = pedidoService.fazendoPedido(idMercado, pedidosRequest);
+		return ResponseEntity.ok(produtoDto);
 	}
 	
 }

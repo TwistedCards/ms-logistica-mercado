@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 import com.projetomercado.mspedido.dto.ProdutoDto;
 import com.projetomercado.mspedido.feignclients.MercadoFeignClient;
 import com.projetomercado.mspedido.model.Mercado;
-import com.projetomercado.mspedido.model.Pedido;
-import com.projetomercado.mspedido.model.Produto;
+import com.projetomercado.mspedido.model.PedidoRequest;
 
 @Service
 public class PedidoService {
@@ -22,14 +21,11 @@ public class PedidoService {
 		return mercado;
 	}
 	
-	public List<Pedido> fazendoPedido(long idMercado, List<ProdutoDto> produtos) {
-		List<Produto> listProdutos = mercadoFeignClient.fazendoCompra(idMercado, produtos).getBody();
+	public ProdutoDto fazendoPedido(long idMercado, List<PedidoRequest> pedidosRequest) {
+		ProdutoDto produtoDto = mercadoFeignClient.fazendoCompra(idMercado, pedidosRequest).getBody();
 		
-		listProdutos.forEach(x -> {
-			System.out.println("nome: " + x.getNome());
-		});
 //		return new Payment(worker.getName(), worker.getDailyIncome(), days);
-		return listProdutos;
+		return produtoDto;
 	}
 	
 }

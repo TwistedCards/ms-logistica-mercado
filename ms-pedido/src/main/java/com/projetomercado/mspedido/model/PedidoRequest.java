@@ -1,4 +1,4 @@
-package com.projetomercado.msmercado.model;
+package com.projetomercado.mspedido.model;
 
 import java.math.BigDecimal;
 
@@ -7,15 +7,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Pedido {
+public class PedidoRequest {
 
 	private String codigo;
 	private BigDecimal qtde;
 	
-	public Pedido() {
+	public PedidoRequest() {
 	}
 
-	public Pedido(String codigo, BigDecimal qtde) {
+	public PedidoRequest(String codigo, BigDecimal qtde) {
 		super();
 		this.codigo = codigo;
 		this.qtde = qtde;

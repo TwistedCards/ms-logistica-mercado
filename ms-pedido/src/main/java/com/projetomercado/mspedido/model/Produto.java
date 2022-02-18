@@ -15,7 +15,7 @@ public class Produto implements Serializable{
 	private String nome;
 	private String codigo;
 	private BigDecimal preco;
-	private Mercado mercado;
+//	private Mercado mercado;
 
 	public Produto() {
 	}

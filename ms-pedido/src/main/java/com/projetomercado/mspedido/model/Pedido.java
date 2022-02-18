@@ -26,7 +26,6 @@ public class Pedido implements Serializable {
 		this.nomeProduto = nomeProduto;
 		this.codigo = codigo;
 		this.qtde = qtde;
-		this.valorTotal = this.
 	}
 	
 }

@@ -1,6 +1,10 @@
 package com.projetomercado.mspedido.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.projetomercado.mspedido.model.Produto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,19 +13,15 @@ import lombok.Setter;
 @Setter
 public class ProdutoDto {
 
-	private String nomeProduto;
-	private String codigo;
-	private BigDecimal qtde;
-	private BigDecimal valor;
+	private List<Produto> produtos = new ArrayList<>();
+	private BigDecimal valorTotal;
 	
 	public ProdutoDto() {
 	}
 
-	public ProdutoDto(String nomeProduto, String codigo, BigDecimal qtde, BigDecimal valor) {
+	public ProdutoDto(List<Produto> produtos, BigDecimal valorTotal) {
 		super();
-		this.nomeProduto = nomeProduto;
-		this.codigo = codigo;
-		this.qtde = qtde;
-		this.valor = valor;
+		this.produtos = produtos;
+		this.valorTotal = valorTotal;
 	}
 }
